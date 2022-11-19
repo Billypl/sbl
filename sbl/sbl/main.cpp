@@ -1,8 +1,14 @@
 #include <iostream>
+#include "lib/algorithm.h"
+#include "lib/pair.h"
 
-using std::cout;
+using namespace sbl;
+
 
 int main()
 {
-	cout << "Hello world";
+	pair<int> a(1, 2);
+	std::cout << a.a << " " << a.b << std::endl;
+	a.swap();
+	std::cout << a.a << " " << a.b << std::endl;
 }
