@@ -140,12 +140,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="lib\src\pair.cpp" />
+    <ClCompile Include="lib\src\vector.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\algorithm.h" />
     <ClInclude Include="lib\hdrs\pair.h" />
+    <ClInclude Include="lib\hdrs\vector.h" />
     <ClInclude Include="lib\pair.h" />
+    <ClInclude Include="lib\vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
