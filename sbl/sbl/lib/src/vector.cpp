@@ -77,7 +77,7 @@ T& vector<T>::at(size_t index)
 {
 	try {
 		if (index < _size && index >= 0)
-			return *(buffer + index);
+	return *(buffer + index);
 		throw "out of bounds";
 	}
 	catch(char* err){
