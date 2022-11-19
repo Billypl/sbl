@@ -24,6 +24,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="lib\src\vector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\algorithm.h">
@@ -34,6 +37,12 @@
     </ClInclude>
     <ClInclude Include="lib\hdrs\pair.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\hdrs\vector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\vector.h">
+      <Filter>Libs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

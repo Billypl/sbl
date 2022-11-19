@@ -1,14 +1,31 @@
 #include <iostream>
 #include "lib/algorithm.h"
 #include "lib/pair.h"
+#include "lib/vector.h"
 
 using namespace sbl;
+
+void vectorTest()
+{
+	vector<int> a;
+	for (int j = 0; j < 10; j++)
+	{
+		a.pushBack(j);
+		for (int i = 0; i < a.size(); i++)
+			std::cout << a[i];
+
+		std::cout << " size: " << a.size() << " capacity: " << a.capacity() << "\n";
+	}
+}
 
 
 int main()
 {
-	pair<int> a(1, 2);
-	std::cout << a.a << " " << a.b << std::endl;
-	a.swap();
-	std::cout << a.a << " " << a.b << std::endl;
+	//vectorTest();
+
+	vector<int> a;
+	a.pushBack(1);
+
+	std::cout << a.at(11);
+	std::cin.get();
 }
