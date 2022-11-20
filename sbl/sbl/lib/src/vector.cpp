@@ -9,18 +9,23 @@ bool vector<T>::isInBounds(size_t index)
 
 template<typename T>
 vector<T>::vector()
+: _size(0), _capacity(0)
 {
-	_size = 0;
-	_capacity = 0;
 	buffer = new T[0];
 }
 
 template<typename T>
 vector<T>::vector(size_t size)
-	: _size(size)
+	: _size(size), _capacity(size)
 {
-	_capacity = _size;
 	buffer = new T[_size];
+}
+
+template<typename T>
+vector<T>::vector(size_t size, const T& element)
+	: vector(size)
+{
+	fill(element);
 }
 
 template<typename T>
@@ -96,13 +101,13 @@ void vector<T>::operator+=(const T& element)
 template<typename T>
 bool vector<T>::operator==(const vector<T>& other)
 {
-	return equals(other);
+	return isEqual(other);
 }
 
 template<typename T>
 bool vector<T>::operator!=(const vector<T>& other)
 {
-	return !equals(other);
+	return !isEqual(other);
 }
 
 template<typename T>
@@ -129,6 +134,14 @@ template<typename T>
 void vector<T>::add(const vector<T>& other)
 {
 	insert(_size, other);
+}
+
+template<typename T>
+template<typename ...T2>
+void vector<T>::add(T first, T2 ...others)
+{
+	add(first);
+	add(others...);
 }
 
 template<typename T>
@@ -168,6 +181,38 @@ void vector<T>::remove(size_t index)
 		delete[] tmp;
 	}
 	catch (char* err) {}
+}
+
+template<typename T>
+void vector<T>::remove(size_t start, size_t end)
+{
+	try {
+		if (!isInBounds(start) || !isInBounds(end))
+			throw "out of bounds";
+		if (start > end)
+			throw "wrong index";
+
+		int difference = end - start + 1;
+		T* tmp = new T[_size - difference];
+		for (int i = 0, j = 0; i < _size; i++, j++)
+		{
+			if (i >= start && i <= end)
+			{
+				j--;
+				continue;
+			}
+			tmp[j] = buffer[i];
+		}
+
+		delete[] buffer;
+		_size -= difference;
+		buffer = new T[_capacity];
+		memcpy(buffer, tmp, _size * sizeof(T));
+
+		delete[] tmp;
+	}
+	catch (char* err) {}
+
 }
 
 template<typename T>
@@ -290,7 +335,7 @@ bool vector<T>::isEmpty()
 }
 
 template<typename T>
-bool vector<T>::equals(const vector<T>& other)
+bool vector<T>::isEqual(const vector<T>& other)
 {
 	if (_size != other._size)
 		return false;
@@ -301,3 +346,4 @@ bool vector<T>::equals(const vector<T>& other)
 
 	return true;
 }
+

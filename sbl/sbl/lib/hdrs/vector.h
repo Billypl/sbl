@@ -11,6 +11,7 @@ public:
 
 	vector		();
 	vector		(size_t size);
+	vector		(size_t size, const T& element); // fill constructor
 	vector		(const vector<T>& other);
 
 	~vector();
@@ -29,14 +30,11 @@ public:
 
 	void add	(const T &element);
 	void add	(const vector<T> &other);
-	template<typename T1, typename... T2>
-	void add	(T1 first, T2... others)
-	{
-		add(first);
-		add(others...);
-	}
+	template<typename... T2>
+	void add	(T first, T2... others);
 	void pop	();
 	void remove	(size_t index);
+	void remove	(size_t start, size_t end);
 	void insert (size_t index, const T& element);
 	void insert	(size_t index, const vector<T>& other);
 	void fill	(const T& value);
@@ -44,11 +42,12 @@ public:
 	void fill	(size_t start, size_t end, const T& value);
 	T&	 at		(size_t index);
 	bool isEmpty();
-	bool equals	(const vector<T>& other);
+	bool isEqual(const vector<T>& other);
 
 private:
 	
 	bool isInBounds(size_t index);
 
 };
+
 
