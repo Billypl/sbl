@@ -1,4 +1,5 @@
 #include "../hdrs/vector.h"
+#include "../algorithm.h"
 #include <cstring>
 
 template<typename T>
@@ -9,7 +10,7 @@ bool vector<T>::isInBounds(size_t index)
 
 template<typename T>
 vector<T>::vector()
-: _size(0), _capacity(0)
+	: _size(0), _capacity(0)
 {
 	buffer = new T[0];
 }
@@ -33,14 +34,15 @@ vector<T>::vector(const vector<T>& other)
 {
 	_size = other._size;
 	_capacity = other._capacity;
-	buffer = new T[other._size];
-	memcpy(buffer, other.buffer, other._size * sizeof(T));
+	buffer = new T[other._capacity];
+	sbl::copy(buffer, other.buffer, other._size);
 }
 
 template<typename T>
 vector<T>::~vector()
 {
 	delete[] buffer;
+	buffer = nullptr;
 }
 
 template<typename T>
@@ -82,8 +84,8 @@ void vector<T>::operator=(const vector<T>& other)
 	_size = other._size;
 	_capacity = other._capacity;
 	delete[] buffer;
-	buffer = new T[_size];
-	memcpy(buffer, other.buffer, _size * sizeof(T));
+	buffer = new T[_capacity];
+	sbl::copy(buffer, other.buffer, _size);
 }
 
 template<typename T>
@@ -121,10 +123,10 @@ void vector<T>::add(const T& element)
 
 		_capacity *= 2;
 		T* tmp = new T[_capacity];
-		memcpy(tmp, buffer, _size * sizeof(T));
+		sbl::copy(tmp, buffer, _size);
 		delete[] buffer;
 		buffer = new T[_capacity];
-		memcpy(buffer, tmp, _size * sizeof(T));
+		sbl::copy(buffer, tmp, _size);
 		delete[] tmp;
 	}
 	buffer[_size-1] = element;
@@ -147,72 +149,62 @@ void vector<T>::add(T first, T2 ...others)
 template<typename T>
 void vector<T>::pop()
 {
-	try {
-		if (_size > 0)
-			_size--;
-		throw "out of bounds";
-	}
-	catch (char* err) {}
+	if (_size > 0)
+		_size--;
+	throw "out of bounds";
 }
 
 template<typename T>
 void vector<T>::remove(size_t index)
 {
-	try {
-		if (!isInBounds(index))
-			throw "out of bounds";
+	if (!isInBounds(index))
+		throw "out of bounds";
 
-		T* tmp = new T[_size - 1];
-		for (int i = 0, j = 0; i < _size; i++, j++)
+	T* tmp = new T[_size - 1];
+	for (int i = 0, j = 0; i < _size; i++, j++)
+	{
+		if (i == index)
 		{
-			if (i == index)
-			{
-				j--;
-				continue;
-			}
-			tmp[j] = buffer[i];
+			j--;
+			continue;
 		}
-
-		delete[] buffer;
-		_size -= 1;
-		buffer = new T[_capacity];
-		memcpy(buffer, tmp, _size * sizeof(T));
-
-		delete[] tmp;
+		tmp[j] = buffer[i];
 	}
-	catch (char* err) {}
+
+	delete[] buffer;
+	_size -= 1;
+	buffer = new T[_capacity];
+	sbl::copy(buffer, tmp, _size);
+
+	delete[] tmp;
 }
 
 template<typename T>
 void vector<T>::remove(size_t start, size_t end)
 {
-	try {
-		if (!isInBounds(start) || !isInBounds(end))
-			throw "out of bounds";
-		if (start > end)
-			throw "wrong index";
+	if (!isInBounds(start) || !isInBounds(end))
+		throw "out of bounds";
+	if (start > end)
+		throw "wrong index";
 
-		int difference = end - start + 1;
-		T* tmp = new T[_size - difference];
-		for (int i = 0, j = 0; i < _size; i++, j++)
+	int difference = end - start + 1;
+	T* tmp = new T[_size - difference];
+	for (int i = 0, j = 0; i < _size; i++, j++)
+	{
+		if (i >= start && i <= end)
 		{
-			if (i >= start && i <= end)
-			{
-				j--;
-				continue;
-			}
-			tmp[j] = buffer[i];
+			j--;
+			continue;
 		}
-
-		delete[] buffer;
-		_size -= difference;
-		buffer = new T[_capacity];
-		memcpy(buffer, tmp, _size * sizeof(T));
-
-		delete[] tmp;
+		tmp[j] = buffer[i];
 	}
-	catch (char* err) {}
 
+	delete[] buffer;
+	_size -= difference;
+	buffer = new T[_capacity];
+	sbl::copy(buffer, tmp, _size);
+
+	delete[] tmp;
 }
 
 template<typename T>
@@ -220,15 +212,11 @@ void vector<T>::insert(size_t index, const T& element)
 {
 	if (_size <= _capacity)
 	{
+		T e = element;
 		for (int i = 0, j = 0; i < _size; i++, j++)
-		{
-			if (i == index)
-			{
-				buffer[j] = element;
-				j++;
-			}
-			buffer[j] = buffer[i];
-		}
+			if (i >= index)
+				sbl::swap(buffer[j], e);
+		buffer[_size] = e;
 		_size++;
 	}
 	else
@@ -246,11 +234,11 @@ void vector<T>::insert(size_t index, const T& element)
 
 		delete[] buffer;
 		_size += 1;
-		buffer = new T[_capacity >= _size ? _capacity : _size];
-		memcpy(buffer, tmp, _size * sizeof(T));
+		_capacity = _capacity >= _size ? _capacity : _size;
+		buffer = new T[_capacity];
+		sbl::copy(buffer, tmp, _size);
 
 		delete[] tmp;
-
 	}
 }
 
@@ -274,8 +262,9 @@ void vector<T>::insert(size_t index, const vector<T>& other)
 
 	delete[] buffer;
 	_size += other._size;
-	buffer = new T[_capacity >= _size ? _capacity : _size];
-	memcpy(buffer, tmp, _size * sizeof(T));
+	_capacity = _capacity >= _size ? _capacity : _size;
+	buffer = new T[_capacity];
+	sbl::copy(buffer, tmp, _size);
 
 	delete[] tmp;
 }
@@ -290,42 +279,30 @@ void vector<T>::fill(const T& value)
 template<typename T>
 void vector<T>::fill(size_t start, const T& value)
 {
-	try {
-		if (!isInBounds(start))
-			throw "out of bounds";
+	if (!isInBounds(start))
+		throw "out of bounds";
 
-		for (int i = start; i < _size; i++)
-			buffer[i] = value;
-	}
-	catch (char* err) {
-
-	}
+	for (int i = start; i < _size; i++)
+		buffer[i] = value;
 }
 
 template<typename T>
 void vector<T>::fill(size_t start, size_t end, const T& value)
 {
-	try {
-		if (!isInBounds(start) && !isInBounds(start) && start <= end)
-			throw "out of bounds";
+	if (!isInBounds(start) && !isInBounds(start) && start <= end)
+		throw "out of bounds";
 
-		for (int i = start; i <= end; i++)
-			buffer[i] = value;
-	}
-	catch (char* err) {
-
-	}
+	for (int i = start; i <= end; i++)
+		buffer[i] = value;
+	
 }
 
 template<typename T>
 T& vector<T>::at(size_t index)
 {
-	try {
-		if (!isInBounds(index))
-			throw "out of bounds";
-		return *(buffer + index);
-	}
-	catch(char* err) {}
+	if (!isInBounds(index))
+		throw "out of bounds";
+	return *(buffer + index);
 }
 
 template<typename T>
