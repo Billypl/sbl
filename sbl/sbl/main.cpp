@@ -10,22 +10,32 @@ void vectorTest()
 	vector<int> a;
 	for (int j = 0; j < 10; j++)
 	{
-		a.pushBack(j);
+		a.add(j);
 		for (int i = 0; i < a.size(); i++)
-			std::cout << a[i];
+			std::cout << a[i] << " ";
 
 		std::cout << " size: " << a.size() << " capacity: " << a.capacity() << "\n";
 	}
 }
 
+void print(vector<int> a)
+{
+	for (int i = 0; i < a.size(); i++)
+		std::cout << a[i] << " ";
+}
 
+using std::cout;
 int main()
 {
-	//vectorTest();
+	vectorTest();
+	/*vector<int> a;
+	a.add(9, 9, 9, 9);
+	a += 1;
+	vector<int> b = a;
+	a += 1;
+	cout << (a != b);
+	a += b;*/
+	
 
-	vector<int> a;
-	a.pushBack(1);
-
-	std::cout << a.at(11);
-	std::cin.get();
 }
+

@@ -2,6 +2,12 @@
 #include <cstring>
 
 template<typename T>
+bool vector<T>::isInBounds(size_t index)
+{
+	return index < _size;
+}
+
+template<typename T>
 vector<T>::vector()
 {
 	_size = 0;
@@ -11,12 +17,11 @@ vector<T>::vector()
 
 template<typename T>
 vector<T>::vector(size_t size)
+	: _size(size)
 {
-	this->_size = _size;
 	_capacity = _size;
 	buffer = new T[_size];
 }
-
 
 template<typename T>
 vector<T>::vector(const vector<T>& other)
@@ -24,7 +29,7 @@ vector<T>::vector(const vector<T>& other)
 	_size = other._size;
 	_capacity = other._capacity;
 	buffer = new T[other._size];
-	memcpy(&buffer, &other.buffer, other._size);
+	memcpy(buffer, other.buffer, other._size * sizeof(T));
 }
 
 template<typename T>
@@ -38,6 +43,7 @@ size_t vector<T>::size()
 {
 	return _size;
 }
+
 template<typename T>
 size_t vector<T>::capacity()
 {
@@ -51,7 +57,56 @@ T& vector<T>::operator[](size_t index)
 }
 
 template<typename T>
-void vector<T>::pushBack(const T& element)
+vector<T> vector<T>::operator+(const vector<T>& other)
+{
+	size_t newSize = _size + other._size;
+	vector<T> tmp(newSize);
+	int iter = 0;
+	
+	for (int i = 0; i < _size; i++)
+		tmp.buffer[iter] = buffer[i];
+	for (int i = 0; i < other._size; i++)
+		tmp.buffer[iter] = other.buffer[i];
+
+	return tmp;
+}
+
+template<typename T>
+void vector<T>::operator=(const vector<T>& other)
+{
+	_size = other._size;
+	_capacity = other._capacity;
+	delete[] buffer;
+	buffer = new T[_size];
+	memcpy(buffer, other.buffer, _size * sizeof(T));
+}
+
+template<typename T>
+void vector<T>::operator+=(const vector<T>& other)
+{
+	add(other);
+}
+
+template<typename T>
+void vector<T>::operator+=(const T& element)
+{
+	add(element);
+}
+
+template<typename T>
+bool vector<T>::operator==(const vector<T>& other)
+{
+	return equals(other);
+}
+
+template<typename T>
+bool vector<T>::operator!=(const vector<T>& other)
+{
+	return !equals(other);
+}
+
+template<typename T>
+void vector<T>::add(const T& element)
 {
 	_size++;
 	if (_size > _capacity)
@@ -70,23 +125,179 @@ void vector<T>::pushBack(const T& element)
 	buffer[_size-1] = element;
 }
 
-#include<iostream>
-#include <stdexcept>
+template<typename T>
+void vector<T>::add(const vector<T>& other)
+{
+	insert(_size, other);
+}
+
+template<typename T>
+void vector<T>::pop()
+{
+	try {
+		if (_size > 0)
+			_size--;
+		throw "out of bounds";
+	}
+	catch (char* err) {}
+}
+
+template<typename T>
+void vector<T>::remove(size_t index)
+{
+	try {
+		if (!isInBounds(index))
+			throw "out of bounds";
+
+		T* tmp = new T[_size - 1];
+		for (int i = 0, j = 0; i < _size; i++, j++)
+		{
+			if (i == index)
+			{
+				j--;
+				continue;
+			}
+			tmp[j] = buffer[i];
+		}
+
+		delete[] buffer;
+		_size -= 1;
+		buffer = new T[_capacity];
+		memcpy(buffer, tmp, _size * sizeof(T));
+
+		delete[] tmp;
+	}
+	catch (char* err) {}
+}
+
+template<typename T>
+void vector<T>::insert(size_t index, const T& element)
+{
+	if (_size <= _capacity)
+	{
+		for (int i = 0, j = 0; i < _size; i++, j++)
+		{
+			if (i == index)
+			{
+				buffer[j] = element;
+				j++;
+			}
+			buffer[j] = buffer[i];
+		}
+		_size++;
+	}
+	else
+	{
+		T* tmp = new T[_size + 1];
+		for (int i = 0, j = 0; i < _size; i++, j++)
+		{
+			if (i == index)
+			{
+				tmp[j] = element;
+				j++;
+			}
+			tmp[j] = buffer[i];
+		}
+
+		delete[] buffer;
+		_size += 1;
+		buffer = new T[_capacity >= _size ? _capacity : _size];
+		memcpy(buffer, tmp, _size * sizeof(T));
+
+		delete[] tmp;
+
+	}
+}
+
+template<typename T>
+void vector<T>::insert(size_t index, const vector<T>& other)
+{
+	T* tmp = new T[_size + other._size];
+	for (int i = 0, j = 0; i < _size + other._size; i++, j++)
+	{
+		if (i == index)
+		{
+			for (int m = 0; m < other._size; m++)
+			{
+				tmp[j] = other.buffer[m];
+				j++;
+			}
+		}
+		if (i < _size)
+			tmp[j] = buffer[i];
+	}
+
+	delete[] buffer;
+	_size += other._size;
+	buffer = new T[_capacity >= _size ? _capacity : _size];
+	memcpy(buffer, tmp, _size * sizeof(T));
+
+	delete[] tmp;
+}
+
+template<typename T>
+void vector<T>::fill(const T& value)
+{
+	for (int i = 0; i < _size; i++)
+		buffer[i] = value;
+}
+
+template<typename T>
+void vector<T>::fill(size_t start, const T& value)
+{
+	try {
+		if (!isInBounds(start))
+			throw "out of bounds";
+
+		for (int i = start; i < _size; i++)
+			buffer[i] = value;
+	}
+	catch (char* err) {
+
+	}
+}
+
+template<typename T>
+void vector<T>::fill(size_t start, size_t end, const T& value)
+{
+	try {
+		if (!isInBounds(start) && !isInBounds(start) && start <= end)
+			throw "out of bounds";
+
+		for (int i = start; i <= end; i++)
+			buffer[i] = value;
+	}
+	catch (char* err) {
+
+	}
+}
+
 template<typename T>
 T& vector<T>::at(size_t index)
 {
 	try {
-		if (index < _size && index >= 0)
-	return *(buffer + index);
-		throw "out of bounds";
+		if (!isInBounds(index))
+			throw "out of bounds";
+		return *(buffer + index);
 	}
-	catch(char* err){
-		
-	}
+	catch(char* err) {}
 }
 
 template<typename T>
 bool vector<T>::isEmpty()
 {
 	return _size;
+}
+
+template<typename T>
+bool vector<T>::equals(const vector<T>& other)
+{
+	if (_size != other._size)
+		return false;
+
+	for (int i = 0; i < _size; i++)
+		if (buffer[i] != other.buffer[i])
+			return false;
+
+	return true;
 }
