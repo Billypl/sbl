@@ -2,13 +2,41 @@
 #include "../algorithm.h"
 #include <conio.h>
 
-template<typename T>
-pair<T>::pair(T a, T b)
+template<typename T1, typename T2>
+pair<T1, T2>::pair(T1 a, T2 b)
 	: a(a), b(b) {}
 
-template<typename T>
-void pair<T>::swap()
+template<typename T1, typename T2>
+void pair<T1, T2>::operator=  (const pair<T1, T2>& other)
 {
-	sbl::swap(a, b);
+	a = other.a;
+	b = other.b;
 }
+
+template<typename T1, typename T2>
+bool pair<T1, T2>::operator==(const pair<T1, T2>& other)
+{
+	return isEqual(other);
+}
+
+template<typename T1, typename T2>
+bool pair<T1, T2>::operator!=(const pair<T1, T2>& other)
+{
+	return !isEqual(other);
+}
+
+template<typename T1, typename T2>
+bool pair<T1, T2>::isEqual(const pair<T1, T2>& other)
+{
+	return (a == other.a) && (b == other.b);
+}
+
+template<typename T1, typename T2>
+void pair<T1, T2>::swap(pair<T1, T2>& other)
+{
+	sbl::swap(a, other.a);
+	sbl::swap(b, other.b);
+}
+
+
 

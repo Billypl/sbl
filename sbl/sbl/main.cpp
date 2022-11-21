@@ -6,23 +6,15 @@
 using namespace sbl;
 using std::cout;
 
-void print(vector<int>& a)
+void print(pair<int, int> a)
 {
-	for (int i = 0; i < a.size(); i++)
-		cout << a[i] << " ";
+	cout << a.a << " " << a.b << std::endl;
 }
 
 int main()
 {
-	vector<int> b,a;
-	b.add(1, 2, 3);
-	b.insert(1, 9);
-	a.add(0);
-	a.add(0);
-	a.insert(1, b);
-	a.remove(2);
-	//a.clear();
-
+	pair<int, int> a(1,2);
 	print(a);
+
 }
 
