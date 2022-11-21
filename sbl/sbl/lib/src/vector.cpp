@@ -10,9 +10,9 @@ bool vector<T>::isInBounds(size_t index)
 
 template<typename T>
 vector<T>::vector()
-	: _size(0), _capacity(0)
+	: _size(0), _capacity(1)
 {
-	buffer = new T[0];
+	buffer = new T[1];
 }
 
 template<typename T>
@@ -118,15 +118,10 @@ void vector<T>::add(const T& element)
 	_size++;
 	if (_size > _capacity)
 	{
-		if (_capacity == 0)
-			_capacity = 1;
-
 		_capacity *= 2;
 		T* tmp = new T[_capacity];
 		sbl::copy(tmp, buffer, _size);
-		delete[] buffer;
-		buffer = new T[_capacity];
-		sbl::copy(buffer, tmp, _size);
+		copyAndAlignBuffer(0, tmp);
 		delete[] tmp;
 	}
 	buffer[_size-1] = element;
@@ -151,7 +146,8 @@ void vector<T>::pop()
 {
 	if (_size > 0)
 		_size--;
-	throw "out of bounds";
+	else
+		throw "out of bounds";
 }
 
 template<typename T>
@@ -171,11 +167,7 @@ void vector<T>::remove(size_t index)
 		tmp[j] = buffer[i];
 	}
 
-	delete[] buffer;
-	_size -= 1;
-	buffer = new T[_capacity];
-	sbl::copy(buffer, tmp, _size);
-
+	copyAndAlignBuffer(-1, tmp);
 	delete[] tmp;
 }
 
@@ -199,53 +191,62 @@ void vector<T>::remove(size_t start, size_t end)
 		tmp[j] = buffer[i];
 	}
 
-	delete[] buffer;
-	_size -= difference;
-	buffer = new T[_capacity];
-	sbl::copy(buffer, tmp, _size);
-
+	copyAndAlignBuffer(-difference, tmp);
 	delete[] tmp;
+}
+
+template<typename T>
+void vector<T>::clear()
+{
+	remove(0, _size - 1);
 }
 
 template<typename T>
 void vector<T>::insert(size_t index, const T& element)
 {
-	if (_size <= _capacity)
-	{
-		T e = element;
-		for (int i = 0, j = 0; i < _size; i++, j++)
-			if (i >= index)
-				sbl::swap(buffer[j], e);
-		buffer[_size] = e;
-		_size++;
-	}
+	if(index > _size)
+		throw "out of bounds";
+	if (isFreeSpace())
+		insertElementToCurrentBuffer(element, index);
 	else
-	{
-		T* tmp = new T[_size + 1];
-		for (int i = 0, j = 0; i < _size; i++, j++)
-		{
-			if (i == index)
-			{
-				tmp[j] = element;
-				j++;
-			}
-			tmp[j] = buffer[i];
-		}
+		insertElementToNewBuffer(index, element);
+}
 
-		delete[] buffer;
-		_size += 1;
-		_capacity = _capacity >= _size ? _capacity : _size;
-		buffer = new T[_capacity];
-		sbl::copy(buffer, tmp, _size);
+template<typename T>
+void vector<T>::insertElementToCurrentBuffer(const T& element, const size_t& index)
+{
+	T e = element;
+	for (int i = 0, j = 0; i < _size; i++, j++)
+		if (i >= index)
+			sbl::swap(buffer[j], e);
+	buffer[_size] = e;
+	_size++;
+}
 
-		delete[] tmp;
-	}
+template<typename T>
+void vector<T>::insertElementToNewBuffer(const size_t& index, const T& element)
+{
+	T* tmp = new T[_size + 1];
+	vector<T> wrapper(1, element);
+	insertVector(index, wrapper, tmp);
+	copyAndAlignBuffer(1, tmp);
+	delete[] tmp;
 }
 
 template<typename T>
 void vector<T>::insert(size_t index, const vector<T>& other)
 {
+	if (!isInBounds(index))
+		throw "out of bounds";
 	T* tmp = new T[_size + other._size];
+	insertVector(index, other, tmp);
+	copyAndAlignBuffer(other._size, tmp);
+	delete[] tmp;
+}
+
+template<typename T>
+void vector<T>::insertVector(size_t index, const vector<T>& other, T* tmp)
+{
 	for (int i = 0, j = 0; i < _size + other._size; i++, j++)
 	{
 		if (i == index)
@@ -259,14 +260,6 @@ void vector<T>::insert(size_t index, const vector<T>& other)
 		if (i < _size)
 			tmp[j] = buffer[i];
 	}
-
-	delete[] buffer;
-	_size += other._size;
-	_capacity = _capacity >= _size ? _capacity : _size;
-	buffer = new T[_capacity];
-	sbl::copy(buffer, tmp, _size);
-
-	delete[] tmp;
 }
 
 template<typename T>
@@ -324,3 +317,18 @@ bool vector<T>::isEqual(const vector<T>& other)
 	return true;
 }
 
+template<typename T>
+bool vector<T>::isFreeSpace()
+{
+	return _size <= _capacity;
+}
+
+template<typename T>
+void vector<T>::copyAndAlignBuffer(size_t elemSize, T* tmp)
+{
+	delete[] buffer;
+	_size += elemSize;
+	_capacity = _capacity >= _size ? _capacity : _size;
+	buffer = new T[_capacity];
+	sbl::copy(buffer, tmp, _size);
+}

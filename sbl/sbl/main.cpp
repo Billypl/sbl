@@ -12,17 +12,17 @@ void print(vector<int>& a)
 		cout << a[i] << " ";
 }
 
-
 int main()
 {
-
-	
-	vector<int> b;
-	b.add(1, 2, 3, 4, 5);
+	vector<int> b,a;
+	b.add(1, 2, 3);
 	b.insert(1, 9);
-	b.remove(3, 4); 
+	a.add(0);
+	a.add(0);
+	a.insert(1, b);
+	a.remove(2);
+	//a.clear();
 
-	print(b);
-
+	print(a);
 }
 

@@ -35,6 +35,7 @@ public:
 	void pop	();
 	void remove	(size_t index);
 	void remove	(size_t start, size_t end);
+	void clear	();
 	void insert (size_t index, const T& element);
 	void insert	(size_t index, const vector<T>& other);
 	void fill	(const T& value);
@@ -47,6 +48,12 @@ public:
 private:
 	
 	bool isInBounds(size_t index);
+	bool isFreeSpace();
+
+	void copyAndAlignBuffer(size_t elemSize, T* tmp);
+	void insertElementToCurrentBuffer(const T& element, const size_t& index);
+	void insertElementToNewBuffer(const size_t& index, const T& element);
+	void insertVector(size_t index, const vector<T>& other, T* tmp);
 
 };
 
