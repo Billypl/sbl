@@ -27,6 +27,9 @@
     <ClCompile Include="lib\src\vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="lib\src\point.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\algorithm.h">
@@ -42,6 +45,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lib\vector.h">
+      <Filter>Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\hdrs\point.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\point.h">
       <Filter>Libs</Filter>
     </ClInclude>
   </ItemGroup>
