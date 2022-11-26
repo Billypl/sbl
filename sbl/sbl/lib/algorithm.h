@@ -16,16 +16,25 @@ namespace sbl
 		for (int i = 0; i < size; i++)
 			dst[i] = src[i];
 	}
+
 	template<typename T>
 	T abs(const T& a)
 	{
 		return a > 0 ? a : -a;
 	}
-	//TODO:
-	// pow() + overload ^ operator
-	// sqrt()
-	// 
-	//
+
+	template<typename T>
+	double pow(T a, int x)
+	{
+		if (x < 0)
+			throw "invalid x";
+
+		double result = 1;
+		for (int i = 0; i < x; i++)
+			result *= a;
+
+		return result;
+	}
 
 
 

@@ -3,7 +3,7 @@
 #include <cstring>
 
 template<typename T>
-bool vector<T>::isInBounds(size_t index)
+bool vector<T>::isInBounds(size_t index) const
 {
 	return index < _size;
 }
@@ -39,6 +39,15 @@ vector<T>::vector(const vector<T>& other)
 }
 
 template<typename T>
+vector<T>::vector(const T* other, size_t size)
+{
+	_size = size;
+	_capacity = size;
+	buffer = new T[size];
+	sbl::copy(buffer, other, size);
+}
+
+template<typename T>
 vector<T>::~vector()
 {
 	delete[] buffer;
@@ -46,13 +55,13 @@ vector<T>::~vector()
 }
 
 template<typename T>
-size_t vector<T>::size()
+size_t vector<T>::size() const
 {
 	return _size;
 }
 
 template<typename T>
-size_t vector<T>::capacity()
+size_t vector<T>::capacity() const
 {
 	return _capacity;
 }
@@ -64,28 +73,41 @@ T& vector<T>::operator[](size_t index)
 }
 
 template<typename T>
-vector<T> vector<T>::operator+(const vector<T>& other)
+const T& vector<T>::operator[](size_t index) const
 {
-	size_t newSize = _size + other._size;
-	vector<T> tmp(newSize);
-	int iter = 0;
-	
-	for (int i = 0; i < _size; i++)
-		tmp.buffer[iter] = buffer[i];
-	for (int i = 0; i < other._size; i++)
-		tmp.buffer[iter] = other.buffer[i];
+	return at(index);
+}
+
+template<typename T>
+vector<T> vector<T>::operator+(const T& element) const
+{
+	vector<T> tmp(buffer);
+	tmp += element;
 
 	return tmp;
 }
 
 template<typename T>
-void vector<T>::operator=(const vector<T>& other)
+vector<T> vector<T>::operator+(const vector<T>& other) const
 {
-	_size = other._size;
-	_capacity = other._capacity;
-	delete[] buffer;
-	buffer = new T[_capacity];
-	sbl::copy(buffer, other.buffer, _size);
+	vector<T> tmp(*this);
+	tmp += other;
+
+	return tmp;
+}
+
+template<typename T>
+vector<T>& vector<T>::operator=(const vector<T>& other)
+{
+	if(&other != this)
+	{
+		_size = other._size;
+		_capacity = other._capacity;
+		delete[] buffer;
+		buffer = new T[_capacity];
+		sbl::copy(buffer, other.buffer, _size);
+	}
+	return *this;
 }
 
 template<typename T>
@@ -101,13 +123,13 @@ void vector<T>::operator+=(const T& element)
 }
 
 template<typename T>
-bool vector<T>::operator==(const vector<T>& other)
+bool vector<T>::operator==(const vector<T>& other) const
 {
 	return isEqual(other);
 }
 
 template<typename T>
-bool vector<T>::operator!=(const vector<T>& other)
+bool vector<T>::operator!=(const vector<T>& other) const
 {
 	return !isEqual(other);
 }
@@ -179,7 +201,7 @@ void vector<T>::remove(size_t start, size_t end)
 	if (start > end)
 		throw "wrong index";
 
-	int difference = end - start + 1;
+	const int difference = end - start + 1;
 	T* tmp = new T[_size - difference];
 	for (int i = 0, j = 0; i < _size; i++, j++)
 	{
@@ -236,7 +258,7 @@ void vector<T>::insertElementToNewBuffer(const size_t& index, const T& element)
 template<typename T>
 void vector<T>::insert(size_t index, const vector<T>& other)
 {
-	if (!isInBounds(index))
+	if (index > _size)
 		throw "out of bounds";
 	T* tmp = new T[_size + other._size];
 	insertVector(index, other, tmp);
@@ -291,7 +313,7 @@ void vector<T>::fill(size_t start, size_t end, const T& value)
 }
 
 template<typename T>
-T& vector<T>::at(size_t index)
+T& vector<T>::at(size_t index) const
 {
 	if (!isInBounds(index))
 		throw "out of bounds";
@@ -299,13 +321,20 @@ T& vector<T>::at(size_t index)
 }
 
 template<typename T>
-bool vector<T>::isEmpty()
+void vector<T>::reverse()
+{
+	for(int i = 0; i < _size/2; i++)
+		sbl::swap(buffer[_size - i - 1], buffer[i]);
+}
+
+template<typename T>
+bool vector<T>::isEmpty() const
 {
 	return _size;
 }
 
 template<typename T>
-bool vector<T>::isEqual(const vector<T>& other)
+bool vector<T>::isEqual(const vector<T>& other) const
 {
 	if (_size != other._size)
 		return false;
@@ -318,7 +347,13 @@ bool vector<T>::isEqual(const vector<T>& other)
 }
 
 template<typename T>
-bool vector<T>::isFreeSpace()
+const T* vector<T>::buff() const
+{
+	return buffer;
+}
+
+template<typename T>
+bool vector<T>::isFreeSpace() const
 {
 	return _size <= _capacity;
 }

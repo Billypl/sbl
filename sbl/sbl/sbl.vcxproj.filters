@@ -30,6 +30,9 @@
     <ClCompile Include="lib\src\point.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="lib\src\string.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\algorithm.h">
@@ -52,6 +55,12 @@
     </ClInclude>
     <ClInclude Include="lib\point.h">
       <Filter>Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\hdrs\string.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\string.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
