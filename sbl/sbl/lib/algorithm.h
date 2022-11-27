@@ -1,4 +1,6 @@
 #pragma once
+#include "string.h"
+#include <cstdio>
 
 namespace sbl
 {
@@ -36,6 +38,44 @@ namespace sbl
 		return result;
 	}
 
+	inline char itoc(int x)
+	{
+		if (x < 0 || x > 9)
+			throw "Not a digit";
+		return x + '0';
+	}
 
+	inline int ctoi(char ch)
+	{
+		if (ch < '0' || ch > '9')
+			throw "Not a number";
+		return ch - '0';
+	}
+
+	inline int stoi(string str)
+	{
+		int number = 0;
+		for(int i = 0; i < str.size(); i++)
+		{
+			if(str[i] == ' ' || str[i] == '\n' || str[i] == EOF)
+				continue;
+			int num = ctoi(str[i]);
+			number += num*pow(10, str.size() - i - 1);
+		}
+		return number;
+	}
+
+	inline string itos(int x)
+	{
+		string number;
+		while (x)
+		{
+			char digit = (x % 10) + '0';
+			number += digit;
+			x /= 10;
+		}
+		number.reverse();
+		return number;
+	}
 
 }

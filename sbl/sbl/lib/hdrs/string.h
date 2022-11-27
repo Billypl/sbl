@@ -8,10 +8,12 @@ class string
 
 public:
 
-	string(){};
+	string();
+	string(const int& x);
 	string(const string& other);
 	string(const vector<char>& other);
 	string(const char* other);
+	string(const char& other);
 
 	~string(){};
 
@@ -19,15 +21,21 @@ public:
 
 	char&		operator[] (size_t index);
 	const char& operator[] (size_t index) const;
-	string		operator+  (const string& other);
-	string		operator+  (const char* other);
+	string		operator+  (const string& other) const;
+	string		operator+  (const char* other) const;
+	string		operator+  (const char& ch) const;
 	string&		operator=  (const string& other);
 	void		operator+= (const string& other);
 	void		operator+= (const char& element);
 	void		operator+= (const char* str);
 
-	bool		operator== (const string& other);
-	bool		operator!= (const string& other);
+	bool		operator== (const string& other) const;
+	bool		operator== (const char* other) const;
+	bool		operator== (const char& ch) const;
+	bool		operator!= (const string& other) const;
+	bool		operator!= (const char* other) const;
+	bool		operator!= (const char& ch) const;
+
 
 	const char* cstr	() const;
 	void		pop		();
@@ -38,7 +46,9 @@ public:
 	void		insert	(size_t index, const string& other);
 	void		reverse	();
 	bool		isEmpty	();
-	bool		isEqual	(const string& other);
+	bool		isEqual	(const string& other) const;
+	bool		isEqual	(const char* other) const;
+	bool		isEqual	(const char& ch) const;
 
 };
 

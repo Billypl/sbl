@@ -1,5 +1,16 @@
 #include "../hdrs/string.h"
 #include "../vector.h"
+#include "../algorithm.h"
+
+string::string()
+{
+	buffer.add('\0');
+}
+
+string::string(const int& x)
+{
+	buffer = sbl::itos(x).buffer;
+}
 
 string::string(const string& other)
 {
@@ -18,6 +29,12 @@ string::string(const char* other)
 		buffer.add(other[i]);
 }
 
+string::string(const char& ch)
+{
+	buffer.add(ch);
+	buffer.add('\0');
+}
+
 size_t string::size() const
 {
 	return buffer.size() - 1;
@@ -32,17 +49,24 @@ const char& string::operator[](size_t index) const
 	return buffer[index];
 }
 
-string string::operator+(const string& other)
+string string::operator+(const string& other) const
 {
 	vector<char> tmp(buffer);
 	tmp.insert(buffer.size() - 1, other.buffer);
 	return tmp;
 }
 
-string string::operator+(const char* other)
+string string::operator+(const char* other) const
 {
 	vector<char> tmp(buffer), oth(other, strlen(other) + 1);
 	tmp.insert(buffer.size() - 1, oth);
+	return tmp;
+}
+
+string string::operator+(const char& ch) const
+{
+	vector<char> tmp(buffer);
+	tmp.insert(buffer.size() - 1, ch);
 	return tmp;
 }
 
@@ -72,14 +96,36 @@ void string::operator+=(const char* str)
 	buffer += tmp;
 }
 
-bool string::operator==(const string& other)
+bool string::operator==(const string& other) const
 {
 	return isEqual(other);
 }
 
-bool string::operator!=(const string& other)
+bool string::operator==(const char* other) const
 {
-	return  !isEqual(other);
+	return isEqual(other);
+
+}
+
+bool string::operator==(const char& ch) const
+{
+	return isEqual(ch);
+}
+
+bool string::operator!=(const string& other) const
+{
+	return !isEqual(other);
+}
+
+bool string::operator!=(const char* other) const
+{
+	return !isEqual(other);
+
+}
+
+bool string::operator!=(const char& ch) const
+{
+	return !isEqual(ch);
 }
 
 
@@ -103,9 +149,20 @@ void string::remove(size_t start, size_t end)
 	buffer.remove(start, end);
 }
 
-bool string::isEqual(const string& other)
+bool string::isEqual(const string& other) const
 {
 	return buffer == other.buffer;
+}
+
+bool string::isEqual(const char* other) const
+{
+	string tmp(other);
+	return buffer == tmp.buffer;
+}
+
+bool string::isEqual(const char& ch) const
+{
+	return (size() == 1 && buffer[0] == ch);
 }
 
 void string::clear()
@@ -132,6 +189,6 @@ void string::reverse()
 
 bool string::isEmpty()
 {
-	return buffer.size();
+	return size() == 0;
 }
 

@@ -6,6 +6,7 @@
 #include "lib/point.h"
 #include "lib/vector.h"
 #include "lib/string.h"
+#include "lib/ffile.h"
 #include <cstdio>
 
 using namespace sbl;
@@ -14,21 +15,17 @@ using std::cout;
 
 int main()
 {
-    string test = "lol";
-    cout << (test + "Los").cstr() << '\n';
-	
-    cout << test.cstr() << '\n';
+	const string s = "test";
+    ffile file(s, iosm::read);
 
-    string s1 = " s1";
-    test += s1;
-    cout << test.cstr() << '\n';
+	while(true)
+	{
+		const string name = file.readLine(':');
+			if (name == EOT)
+			break;
+		const int value = file.readInt();
+		printf("Name: %s value: %i \n", name.cstr(), value);
+	}
 
-    test += 'A';
-    cout << test.cstr() << '\n';
-
-    test += "_IT IS MAGIC_";
-    cout << test.cstr() << '\n';
-
-    
 }
 

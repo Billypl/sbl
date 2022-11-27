@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="lib\src\ffile.cpp" />
     <ClCompile Include="lib\src\pair.cpp" />
     <ClCompile Include="lib\src\point.cpp" />
     <ClCompile Include="lib\src\string.cpp" />
@@ -147,6 +148,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\algorithm.h" />
+    <ClInclude Include="lib\ffile.h" />
+    <ClInclude Include="lib\hdrs\ffile.h" />
     <ClInclude Include="lib\hdrs\pair.h" />
     <ClInclude Include="lib\hdrs\point.h" />
     <ClInclude Include="lib\hdrs\string.h" />
