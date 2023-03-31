@@ -142,7 +142,7 @@ void vector<T>::add(const T& element)
 	{
 		_capacity *= 2;
 		T* tmp = new T[_capacity];
-		sbl::copy(tmp, buffer, _size);
+		sbl::copy(tmp, buffer, _size - 1);
 		copyAndAlignBuffer(0, tmp);
 		delete[] tmp;
 	}

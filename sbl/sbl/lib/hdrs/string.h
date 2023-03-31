@@ -24,10 +24,12 @@ public:
 	string		operator+  (const string& other) const;
 	string		operator+  (const char* other) const;
 	string		operator+  (const char& ch) const;
+	string		operator+  (const int& num) const;
 	string&		operator=  (const string& other);
-	void		operator+= (const string& other);
-	void		operator+= (const char& element);
-	void		operator+= (const char* str);
+	string&		operator+= (const string& other);
+	string&		operator+= (const char& element);
+	string&		operator+= (const char* str);
+	void		operator+= (const int& num);
 
 	bool		operator== (const string& other) const;
 	bool		operator== (const char* other) const;

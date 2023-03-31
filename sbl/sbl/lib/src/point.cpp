@@ -13,19 +13,19 @@ inline void point<T>::operator=(const point<T>& other)
 }
 
 template<typename T>
-inline bool point<T>::operator==(const point<T>& other)
+inline bool point<T>::operator==(const point<T>& other) const
 {
 	return isEqual(other);
 }
 
 template<typename T>
-inline bool point<T>::operator!=(const point<T>& other)
+inline bool point<T>::operator!=(const point<T>& other) const
 {
 	return !isEqual(other);
 }
 
 template<typename T>
-inline bool point<T>::isEqual(const point<T>& other)
+inline bool point<T>::isEqual(const point<T>& other) const
 {
 	return (x == other.x) && (y == other.y);
 }

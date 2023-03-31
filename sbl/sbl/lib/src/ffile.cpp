@@ -32,7 +32,8 @@ void ffile::open(const char* filename, const char* mode)
 
 void ffile::close()
 {
-	fclose(file);
+	if(file != nullptr)
+		fclose(file);
 }
 
 void ffile::write(const char* str)
@@ -45,6 +46,12 @@ void ffile::write(const string& str)
 	fputs(str.cstr(), file);
 }
 
+void ffile::writeLine(const string& str)
+{
+	fputs(str.cstr(), file);
+	fputc('\n', file);
+}
+
 void ffile::movePos(int offset)
 {
 	fseek(file, offset, SEEK_CUR);
@@ -53,6 +60,16 @@ void ffile::movePos(int offset)
 void ffile::setPos(int index)
 {
 	fseek(file, index, SEEK_SET);
+}
+
+bool ffile::eof()
+{
+	return feof(file);
+}
+
+bool ffile::operator==(const FILE* other) const
+{
+	return file == other;
 }
 
 void ffile::write(char ch)
@@ -88,7 +105,7 @@ string ffile::readLine(char end)
 			break;
 		isFirstChar = false;
 
-		chars += ch;
+		chars += char(ch);
 	}
 
 	if (chars.isEmpty() && ch == EOF)

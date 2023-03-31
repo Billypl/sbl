@@ -1,6 +1,5 @@
 #include "../hdrs/pair.h"
 #include "../algorithm.h"
-#include <conio.h>
 
 template<typename T1, typename T2>
 pair<T1, T2>::pair(T1 a, T2 b)
@@ -14,19 +13,19 @@ void pair<T1, T2>::operator=  (const pair<T1, T2>& other)
 }
 
 template<typename T1, typename T2>
-bool pair<T1, T2>::operator==(const pair<T1, T2>& other)
+bool pair<T1, T2>::operator==(const pair<T1, T2>& other) const
 {
 	return isEqual(other);
 }
 
 template<typename T1, typename T2>
-bool pair<T1, T2>::operator!=(const pair<T1, T2>& other)
+bool pair<T1, T2>::operator!=(const pair<T1, T2>& other) const
 {
 	return !isEqual(other);
 }
 
 template<typename T1, typename T2>
-bool pair<T1, T2>::isEqual(const pair<T1, T2>& other)
+bool pair<T1, T2>::isEqual(const pair<T1, T2>& other) const
 {
 	return (a == other.a) && (b == other.b);
 }

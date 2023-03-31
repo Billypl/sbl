@@ -52,6 +52,7 @@ const char& string::operator[](size_t index) const
 string string::operator+(const string& other) const
 {
 	vector<char> tmp(buffer);
+	tmp.pop();
 	tmp.insert(buffer.size() - 1, other.buffer);
 	return tmp;
 }
@@ -59,6 +60,7 @@ string string::operator+(const string& other) const
 string string::operator+(const char* other) const
 {
 	vector<char> tmp(buffer), oth(other, strlen(other) + 1);
+	tmp.pop();
 	tmp.insert(buffer.size() - 1, oth);
 	return tmp;
 }
@@ -66,7 +68,16 @@ string string::operator+(const char* other) const
 string string::operator+(const char& ch) const
 {
 	vector<char> tmp(buffer);
+	tmp.pop();
 	tmp.insert(buffer.size() - 1, ch);
+	return tmp;
+}
+
+string string::operator+(const int& num) const
+{
+	vector<char> tmp(buffer);
+	tmp.pop();
+	tmp.insert(buffer.size() - 1, sbl::itos(num).buffer);
 	return tmp;
 }
 
@@ -76,24 +87,32 @@ string& string::operator=(const string& other)
 	return *this;
 }
 
-void string::operator+=(const string& other)
+string& string::operator+=(const string& other)
 {
 	buffer.pop();
 	buffer += other.buffer;
+	return *this;
 }
 
-void string::operator+=(const char& element)
+string& string::operator+=(const char& element)
 {
 	buffer.pop();
 	buffer += element;
 	buffer += '\0';
+	return *this;
 }
 
-void string::operator+=(const char* str)
+string& string::operator+=(const char* str)
 {
 	vector<char> tmp(str, strlen(str) + 1);
 	buffer.pop();
 	buffer += tmp;
+	return *this;
+}
+
+void string::operator+=(const int& num)
+{
+	*this += sbl::itos(num);
 }
 
 bool string::operator==(const string& other) const

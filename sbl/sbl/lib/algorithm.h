@@ -1,6 +1,8 @@
 #pragma once
 #include "string.h"
-#include <cstdio>
+#ifndef EOF
+#define EOF -1
+#endif 
 
 namespace sbl
 {
@@ -67,15 +69,35 @@ namespace sbl
 
 	inline string itos(int x)
 	{
-		string number;
+		string number, sign(x < 0 ? "-" : "");
+		if (x == 0)
+			return (number+='0');
 		while (x)
 		{
-			char digit = (x % 10) + '0';
+			char digit = (abs(x) % 10) + '0';
 			number += digit;
 			x /= 10;
 		}
+		number += sign;
 		number.reverse();
 		return number;
 	}
 
+	inline char toLowercase(char ch)
+	{
+		const int caseAsciiGap = 'a' - 'A';
+		if (ch >= 'A' && ch <= 'Z')
+			ch += caseAsciiGap;
+
+		return ch;
+	}
+
+	inline char toUppercase(char ch)
+	{
+		const int caseAsciiGap = 'a' - 'A';
+		if (ch >= 'a' && ch <= 'z')
+			ch -= caseAsciiGap;
+
+		return ch;
+	}
 }

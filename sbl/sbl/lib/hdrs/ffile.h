@@ -15,9 +15,10 @@ struct iosm
 
 class ffile
 {
-	FILE* file = nullptr;
 
 public:
+
+	FILE* file = nullptr;
 
 	ffile(){};
 	ffile(const char* filename, const char* mode);
@@ -29,6 +30,8 @@ public:
 
 	void movePos(int offset);
 	void setPos(int index);
+	bool eof();
+	bool operator==(const FILE* other) const;
 
 	void write(char ch);
 	void write(int num);
@@ -40,6 +43,5 @@ public:
 	string	read();
 	int		readInt();
 	string	readLine(char end = '\0');
-	char	readChar();
 };
 
