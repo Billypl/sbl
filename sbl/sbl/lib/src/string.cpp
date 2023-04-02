@@ -69,7 +69,8 @@ string string::operator+(const char& ch) const
 {
 	vector<char> tmp(buffer);
 	tmp.pop();
-	tmp.insert(buffer.size() - 1, ch);
+	tmp += ch;
+	tmp +='\0';
 	return tmp;
 }
 
@@ -106,6 +107,7 @@ string& string::operator+=(const char* str)
 {
 	vector<char> tmp(str, strlen(str) + 1);
 	buffer.pop();
+	tmp[tmp.size() - 1] = '\0';
 	buffer += tmp;
 	return *this;
 }
@@ -156,6 +158,7 @@ const char* string::cstr() const
 void string::pop()
 {
 	buffer.pop();
+	buffer[buffer.size() - 1] = '\0';
 }
 
 void string::remove(size_t index)
@@ -165,7 +168,10 @@ void string::remove(size_t index)
 
 void string::remove(size_t start, size_t end)
 {
+	size_t indx = start + (buffer.size() - end) - 1;
 	buffer.remove(start, end);
+	if(buffer[buffer.size() - 1] != '\0')
+		buffer += '\0';
 }
 
 bool string::isEqual(const string& other) const
@@ -187,6 +193,7 @@ bool string::isEqual(const char& ch) const
 void string::clear()
 {
 	buffer.clear();
+	buffer.add('\0');
 }
 
 void string::insert(size_t index, const char& element)
@@ -194,8 +201,9 @@ void string::insert(size_t index, const char& element)
 	buffer.insert(index, element);
 }
 
-void string::insert(size_t index, const string& other)
+void string::insert(size_t index, string other)
 {
+	other.buffer.pop();
 	buffer.insert(index, other.buffer);
 }
 

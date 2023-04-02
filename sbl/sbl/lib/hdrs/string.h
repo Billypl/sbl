@@ -45,7 +45,7 @@ public:
 	void		remove	(size_t start, size_t end);
 	void		clear	();
 	void		insert	(size_t index, const char& element);
-	void		insert	(size_t index, const string& other);
+	void		insert	(size_t index, string other);
 	void		reverse	();
 	bool		isEmpty	();
 	bool		isEqual	(const string& other) const;

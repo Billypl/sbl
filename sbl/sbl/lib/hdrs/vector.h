@@ -49,13 +49,15 @@ public:
 	bool		isEmpty () const;
 	bool		isEqual (const vector<T>& other)	const;
 	const		T* buff ()							const;
+	void		reserve (size_t size);
 
 private:
 	
 	bool isInBounds(size_t index)					const;
 	bool isFreeSpace()								const;
+	void moveItems(const int difference, const size_t start);
 
-	void copyAndAlignBuffer(size_t elemSize, T* tmp);
+	void updateData(size_t elemSize, T* tmp);
 	void insertElementToCurrentBuffer(const T& element, const size_t& index);
 	void insertElementToNewBuffer(const size_t& index, const T& element);
 	void insertVector(size_t index, const vector<T>& other, T* tmp);
