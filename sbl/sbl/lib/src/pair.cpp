@@ -1,5 +1,6 @@
 #include "../hdrs/pair.h"
 #include "../algorithm.h"
+#include <iostream>
 
 template<typename T1, typename T2>
 pair<T1, T2>::pair(T1 a, T2 b)
@@ -37,5 +38,10 @@ void pair<T1, T2>::swap(pair<T1, T2>& other)
 	sbl::swap(b, other.b);
 }
 
-
+template<typename T1, typename T2>
+std::ostream& operator<<(std::ostream& os, const pair<T1, T2>& p)
+{
+	std::cout << "(" << p.a << "," << p.b << ")";
+	return os;
+}
 

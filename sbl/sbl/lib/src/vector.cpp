@@ -2,7 +2,7 @@
 #include "../algorithm.h"
 #include <cstring>
 
-#define BASIC_VECTOR_CAPACITY 1
+#define BASIC_VECTOR_CAPACITY 8
 
 template<typename T>
 bool vector<T>::isInBounds(size_t index) const
@@ -101,7 +101,7 @@ vector<T> vector<T>::operator+(const vector<T>& other) const
 template<typename T>
 vector<T>& vector<T>::operator=(const vector<T>& other)
 {
-	if(&other != this)
+	if (&other != this)
 	{
 		_size = other._size;
 		_capacity = other._capacity;
@@ -148,7 +148,7 @@ void vector<T>::add(const T& element)
 		delete[] buffer;
 		buffer = tmp;
 	}
-	buffer[_size-1] = element;
+	buffer[_size - 1] = element;
 }
 
 template<typename T>
@@ -212,7 +212,7 @@ void vector<T>::clear()
 template<typename T>
 void vector<T>::insert(size_t index, const T& element)
 {
-	if(index > _size)
+	if (index > _size)
 		throw "out of bounds";
 	if (isFreeSpace())
 		insertElementToCurrentBuffer(element, index);
@@ -298,7 +298,7 @@ void vector<T>::fill(size_t start, size_t end, const T& value)
 
 	for (int i = start; i <= end; i++)
 		buffer[i] = value;
-	
+
 }
 
 template<typename T>
@@ -312,14 +312,14 @@ T& vector<T>::at(size_t index) const
 template<typename T>
 void vector<T>::reverse()
 {
-	for(int i = 0; i < _size/2; i++)
+	for (int i = 0; i < _size / 2; i++)
 		sbl::swap(buffer[_size - i - 1], buffer[i]);
 }
 
 template<typename T>
 bool vector<T>::isEmpty() const
 {
-	return _size == 0 ;
+	return _size == 0;
 }
 
 template<typename T>
@@ -335,7 +335,7 @@ bool vector<T>::isEqual(const vector<T>& other) const
 	return true;
 }
 
-template<typename T> 
+template<typename T>
 const T* vector<T>::buff() const
 {
 	return buffer;

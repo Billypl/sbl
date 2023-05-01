@@ -1,6 +1,7 @@
 #include "../hdrs/string.h"
 #include "../vector.h"
 #include "../algorithm.h"
+#include <iostream>
 
 string::string()
 {
@@ -19,13 +20,13 @@ string::string(const string& other)
 
 string::string(const vector<char>& other)
 {
-	for(int i = 0; i < other.size(); i++)
+	for (int i = 0; i < other.size(); i++)
 		buffer.add(other[i]);
 }
 
 string::string(const char* other)
 {
-	for(int i = 0; i < strlen(other) + 1; i++)
+	for (int i = 0; i < strlen(other) + 1; i++)
 		buffer.add(other[i]);
 }
 
@@ -70,7 +71,7 @@ string string::operator+(const char& ch) const
 	vector<char> tmp(buffer);
 	tmp.pop();
 	tmp += ch;
-	tmp +='\0';
+	tmp += '\0';
 	return tmp;
 }
 
@@ -170,7 +171,7 @@ void string::remove(size_t start, size_t end)
 {
 	size_t indx = start + (buffer.size() - end) - 1;
 	buffer.remove(start, end);
-	if(buffer[buffer.size() - 1] != '\0')
+	if (buffer[buffer.size() - 1] != '\0')
 		buffer += '\0';
 }
 
@@ -188,6 +189,53 @@ bool string::isEqual(const char* other) const
 bool string::isEqual(const char& ch) const
 {
 	return (size() == 1 && buffer[0] == ch);
+}
+
+string string::trimStart() const
+{
+	string tmp = (*this);
+	while (isspace(tmp.buffer[0]))
+		tmp.remove(0);
+	return tmp;
+}
+
+string string::trimEnd() const
+{
+	string tmp = (*this);
+	while (isspace(tmp[sbl::max(int(tmp.size() - 1), 0)]))
+		tmp.pop();
+	return tmp;
+}
+
+string string::trim() const
+{
+	string tmp = (*this);
+	tmp = tmp.trimStart();
+	tmp = tmp.trimEnd();
+	return tmp;
+}
+
+vector<string> string::split(char separator)
+{
+	return string::split((*this), separator);
+}
+
+vector<string> string::split(const string& str, char separator)
+{
+	vector<string> result;
+	string tmp;
+	for (int i = 0; i < str.size(); i++)
+	{
+		if (str[i] == separator)
+		{
+			result.add(tmp);
+			tmp.clear();
+		}
+		else
+			tmp += str[i];
+	}
+	result.add(tmp);
+	return result;
 }
 
 void string::clear()
@@ -219,3 +267,8 @@ bool string::isEmpty()
 	return size() == 0;
 }
 
+std::ostream& operator<<(std::ostream& os, const string& str)
+{
+	std::cout << str.cstr();
+	return os;
+}

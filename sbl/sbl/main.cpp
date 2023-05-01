@@ -28,9 +28,8 @@ void printVec(vector<T> v)
 
 int main()
 {
-	//vectorTest();
-    //stringTest();
-    //test_vector<int>();
+    stringTest();
+    test_vector<int>();
 }
 
 template <typename T>
