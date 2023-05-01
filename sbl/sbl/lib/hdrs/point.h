@@ -1,27 +1,24 @@
 #pragma once
 
-template <typename T>
 class point
 {
 
 public:
 
-	T x, y;
+    int x, y;
 
-	point			  () {};
-	point			  (T x, T y);
-	void   operator=  (const point<T>& other);
-	bool   operator== (const point<T>& other) const;
-	bool   operator!= (const point<T>& other) const;
-	bool   isEqual	  (const point<T>& other) const;
+    point			    () {};
+    point	    (int x, int y);
+    point   operator+  (const point& other) const;
+    point   operator-  (const point& other) const;
+    point   operator*  (int scale) const;
+    void   operator+=  (const point& other);
+    void   operator-=  (const point& other);
+    void   operator*=  (int scale);
+    bool   operator==   (const point& other) const;
+    bool   operator!=   (const point& other) const;
+    bool   isEqual	    (const point& other) const;
 
-	void swap         ();
-	void swap         (point<T>& other);
-};
-
-class coords : public point<int> 
-{ 
-public:
-	coords() = default;
-	using point::point;
+    void swap         ();
+    void swap         (point& other);
 };

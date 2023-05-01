@@ -26,11 +26,17 @@ void printVec(vector<T> v)
     cout << endl;
 }
 
+
+
 int main()
 {
-	//vectorTest();
-    //stringTest();
-    //test_vector<int>();
+   /* stringTest();
+    test_vector<int>();*/
+
+    point a(1,2);
+    a *= 2;
+    cout << a.x << a.y;
+
 }
 
 template <typename T>

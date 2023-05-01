@@ -59,10 +59,32 @@ namespace sbl
 		int number = 0;
 		for(int i = 0; i < str.size(); i++)
 		{
-			if(str[i] == ' ' || str[i] == '\n' || str[i] == EOF)
+			if(str[i] <= ' ')
 				continue;
 			int num = ctoi(str[i]);
 			number += num*pow(10, str.size() - i - 1);
+		}
+		return number;
+	}
+
+	inline int ctoiBool(char ch)
+	{
+		if (ch < '0' || ch > '9')
+			return -1;
+		return ch - '0';
+	}
+
+	inline int stoiBool(string str)
+	{
+		int number = 0;
+		for (int i = 0; i < str.size(); i++)
+		{
+			if (str[i] <= ' ')
+				continue;
+			int num = ctoiBool(str[i]);
+			if (num == -1)
+				return -1;
+			number += num * pow(10, str.size() - i - 1);
 		}
 		return number;
 	}

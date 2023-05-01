@@ -1,44 +1,63 @@
 #include "../hdrs/point.h"
 #include "../algorithm.h"
 
-template<typename T>
-point<T>::point(T x, T y)
-	: x(x), y(y) {}
+point::point(int x, int y)
+    : x(x), y(y) {}
 
-template<typename T>
-inline void point<T>::operator=(const point<T>& other)
+bool point::operator==(const point& other) const
 {
-	x = other.x;
-	y = other.y;
+    return isEqual(other);
 }
 
-template<typename T>
-inline bool point<T>::operator==(const point<T>& other) const
+bool point::operator!=(const point& other) const
 {
-	return isEqual(other);
+    return !isEqual(other);
 }
 
-template<typename T>
-inline bool point<T>::operator!=(const point<T>& other) const
+bool point::isEqual(const point& other) const
 {
-	return !isEqual(other);
+    return (x == other.x) && (y == other.y);
 }
 
-template<typename T>
-inline bool point<T>::isEqual(const point<T>& other) const
+void point::swap()
 {
-	return (x == other.x) && (y == other.y);
+    std::swap(x, y);
 }
 
-template<typename T>
-void point<T>::swap()
+void point::swap(point& other)
 {
-	sbl::swap(x, y);
+    std::swap(x, other.x);
 }
 
-template<typename T>
-void point<T>::swap(point<T>& other)
+point point::operator+(const point& other) const
 {
-	sbl::swap(x, other.x);
-	sbl::swap(y, other.y);
+    point tmp(x + other.x, y + other.y);
+    return tmp;
+}
+
+point point::operator-(const point& other) const
+{
+    point tmp(x - other.x, y - other.y);
+    return tmp;
+}
+
+point point::operator*(int scale) const
+{
+    point tmp(x * scale, y * scale);
+    return tmp;
+}
+
+void point::operator+=(const point& other)
+{
+    (*this) = ((*this) + other);
+}
+
+void point::operator-=(const point& other)
+{
+    (*this) = ((*this) - other);
+}
+
+void point::operator*=(int scale)
+{
+    (*this) = ((*this) * scale);
 }
